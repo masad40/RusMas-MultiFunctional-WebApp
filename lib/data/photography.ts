@@ -1,0 +1,92 @@
+import type { GalleryImage } from "@/types";
+
+/** Curated placeholders — swap for CMS / Mongo uploads. */
+export const photographyGallery: readonly GalleryImage[] = [
+  {
+    id: "w-1",
+    category: "wedding",
+    title: "Vows by candlelight",
+    alt: "Bride and groom exchanging vows in warm candlelit venue",
+    src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 2133,
+  },
+  {
+    id: "w-2",
+    category: "wedding",
+    title: "Courtyard procession",
+    alt: "Wedding party walking through a stone courtyard",
+    src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b00c?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 1067,
+  },
+  {
+    id: "w-3",
+    category: "wedding",
+    title: "Ocean terrace",
+    alt: "Outdoor wedding reception overlooking the ocean at dusk",
+    src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 1067,
+  },
+  {
+    id: "p-1",
+    category: "portrait",
+    title: "Mono study",
+    alt: "Portrait in dramatic black and white light",
+    src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 2000,
+  },
+  {
+    id: "p-2",
+    category: "portrait",
+    title: "Soft window light",
+    alt: "Close portrait illuminated by soft side window light",
+    src: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 2400,
+  },
+  {
+    id: "p-3",
+    category: "portrait",
+    title: "Editorial stare",
+    alt: "Fashion editorial portrait with bold shadow",
+    src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 2000,
+  },
+  {
+    id: "e-1",
+    category: "event",
+    title: "Stage wash",
+    alt: "Corporate event keynote with purple stage wash",
+    src: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 1067,
+  },
+  {
+    id: "e-2",
+    category: "event",
+    title: "After-hours",
+    alt: "Crowd silhouettes under warm event lighting",
+    src: "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 1067,
+  },
+  {
+    id: "e-3",
+    category: "event",
+    title: "Gala tables",
+    alt: "Formal gala dinner tables with chandeliers",
+    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1600&q=85&auto=format&fit=crop",
+    width: 1600,
+    height: 1143,
+  },
+];
+
+export const categoryLabels: Record<GalleryImage["category"], string> = {
+  wedding: "Wedding",
+  portrait: "Portrait",
+  event: "Event",
+};
