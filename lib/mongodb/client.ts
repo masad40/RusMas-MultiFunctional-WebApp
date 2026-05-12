@@ -1,4 +1,4 @@
-import { type Db, MongoClient } from "mongodb";
+import { type Db, MongoClient, ServerApiVersion } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
 
@@ -10,9 +10,18 @@ export function getMongoClient(): Promise<MongoClient> {
       new Error('Missing environment variable "MONGODB_URI"'),
     );
   }
+  
   if (!clientPromise) {
-    clientPromise = new MongoClient(uri).connect();
+    const client = new MongoClient(uri, {
+      serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+      },
+    });
+    clientPromise = client.connect();
   }
+  
   return clientPromise;
 }
 

@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #030303;
+  --bg: #000000;
   --bg-elevated: #0a0a0a;
-  --fg: #f4f4f5;
+  --fg: #ffffff;
   --fg-muted: #a1a1aa;
   --border: rgba(255, 255, 255, 0.08);
   --gold: #d4af37;
@@ -29,8 +29,8 @@ html {
 body {
   background-color: var(--bg);
   background-image:
-    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(212, 175, 55, 0.07), transparent 55%),
-    linear-gradient(180deg, var(--bg) 0%, #050505 100%);
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(212, 175, 55, 0.05), transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03), transparent 50%);
   color: var(--fg);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   letter-spacing: 0.01em;

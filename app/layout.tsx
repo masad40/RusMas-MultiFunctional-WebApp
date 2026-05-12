@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
-const display = Cormorant_Garamond({
+const display = Playfair_Display({
   variable: "--font-display-family",
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "600", "700"],
 });
 
 const body = Inter({
