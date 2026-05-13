@@ -4,8 +4,8 @@
   --bg: #000000;
   --bg-elevated: #0a0a0a;
   --fg: #ffffff;
-  --fg-muted: #a1a1aa;
-  --border: rgba(255, 255, 255, 0.08);
+  --fg-muted: #d1d5db;
+  --border: rgba(255, 255, 255, 0.1);
   --gold: #d4af37;
   --gold-muted: rgba(212, 175, 55, 0.35);
 }

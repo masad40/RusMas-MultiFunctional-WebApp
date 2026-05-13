@@ -18,13 +18,27 @@ export function LoginForm() {
   const [error, setError] = useState("");
 
   // Email/Password state
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   // Phone state
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [confirmationResult, setConfirmationResult] = useState<any>(null);
+
+  async function saveUserToMongoDB(userData: any) {
+    try {
+      await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+    } catch (err) {
+      console.error("Failed to save user to MongoDB:", err);
+    }
+  }
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,7 +47,16 @@ export function LoginForm() {
 
     try {
       if (isSignUp) {
-        await signUpWithEmail(email, password);
+        const userCredential = await signUpWithEmail(email, password);
+        // Save to MongoDB
+        await saveUserToMongoDB({
+          uid: userCredential.user.uid,
+          name: name || email.split("@")[0],
+          email,
+          imageUrl: imageUrl || "",
+          role: "user",
+          createdAt: new Date().toISOString(),
+        });
       } else {
         await signInWithEmail(email, password);
       }
@@ -51,7 +74,16 @@ export function LoginForm() {
     setError("");
 
     try {
-      await signInWithGoogle();
+      const userCredential = await signInWithGoogle();
+      // Save to MongoDB
+      await saveUserToMongoDB({
+        uid: userCredential.user.uid,
+        name: userCredential.user.displayName || "",
+        email: userCredential.user.email || "",
+        imageUrl: userCredential.user.photoURL || "",
+        role: "user",
+        createdAt: new Date().toISOString(),
+      });
       router.push("/");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Google sign-in failed";
@@ -68,7 +100,6 @@ export function LoginForm() {
 
     try {
       if (!confirmationResult) {
-        // Initialize recaptcha if not already done
         if (!(window as any).recaptchaVerifier) {
           (window as any).recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
             size: "invisible",
@@ -79,8 +110,17 @@ export function LoginForm() {
         setConfirmationResult(result);
         setError("OTP sent to your phone");
       } else {
-        // Verify OTP
-        await confirmationResult.confirm(otp);
+        const userCredential = await confirmationResult.confirm(otp);
+        // Save to MongoDB
+        await saveUserToMongoDB({
+          uid: userCredential.user.uid,
+          name: name || phone,
+          email: "",
+          phone: userCredential.user.phoneNumber || phone,
+          imageUrl: imageUrl || "",
+          role: "user",
+          createdAt: new Date().toISOString(),
+        });
         router.push("/");
       }
     } catch (err) {
@@ -129,6 +169,36 @@ export function LoginForm() {
         {/* Email/Password form */}
         {mode === "email" && (
           <form onSubmit={handleEmailSubmit} className="mt-6 space-y-4">
+            {isSignUp && (
+              <>
+                <div>
+                  <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="admin-input"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
+                    Profile Image URL (optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    className="admin-input"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                </div>
+              </>
+            )}
+
             <div>
               <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
                 Email
@@ -181,20 +251,48 @@ export function LoginForm() {
         {mode === "phone" && (
           <form onSubmit={handlePhoneSubmit} className="mt-6 space-y-4">
             {!confirmationResult ? (
-              <div>
-                <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="+1234567890"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="admin-input"
-                />
-                <p className="mt-1 text-xs text-foreground-muted">Include country code (e.g., +1)</p>
-              </div>
+              <>
+                <div>
+                  <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="admin-input"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
+                    Profile Image URL (optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    className="admin-input"
+                    placeholder="https://example.com/image.jpg"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="+8801234567890"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="admin-input"
+                  />
+                  <p className="mt-1 text-xs text-foreground-muted">Include country code (e.g., +880)</p>
+                </div>
+              </>
             ) : (
               <div>
                 <label className="block text-xs tracking-widest uppercase text-foreground-muted mb-1.5">
@@ -275,7 +373,6 @@ export function LoginForm() {
           </button>
         </div>
 
-        {/* Recaptcha container */}
         <div id="recaptcha-container" />
       </div>
     </main>

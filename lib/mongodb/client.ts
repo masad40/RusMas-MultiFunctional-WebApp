@@ -18,6 +18,8 @@ export function getMongoClient(): Promise<MongoClient> {
         strict: true,
         deprecationErrors: true,
       },
+      connectTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
     });
     clientPromise = client.connect();
   }
